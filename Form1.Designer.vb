@@ -31,6 +31,8 @@ Partial Class Form1
         Label2 = New Label()
         Label1 = New Label()
         GroupBox2 = New GroupBox()
+        btnupdate = New Button()
+        btndelete = New Button()
         txtstudcourse = New TextBox()
         Button1 = New Button()
         Label7 = New Label()
@@ -40,6 +42,7 @@ Partial Class Form1
         Label4 = New Label()
         Label5 = New Label()
         Label6 = New Label()
+        btndisplay = New Button()
         GroupBox1.SuspendLayout()
         GroupBox2.SuspendLayout()
         SuspendLayout()
@@ -119,6 +122,8 @@ Partial Class Form1
         ' 
         ' GroupBox2
         ' 
+        GroupBox2.Controls.Add(btnupdate)
+        GroupBox2.Controls.Add(btndelete)
         GroupBox2.Controls.Add(txtstudcourse)
         GroupBox2.Controls.Add(Button1)
         GroupBox2.Controls.Add(Label7)
@@ -130,10 +135,28 @@ Partial Class Form1
         GroupBox2.Controls.Add(Label6)
         GroupBox2.Location = New Point(397, 33)
         GroupBox2.Name = "GroupBox2"
-        GroupBox2.Size = New Size(369, 312)
+        GroupBox2.Size = New Size(377, 364)
         GroupBox2.TabIndex = 1
         GroupBox2.TabStop = False
         GroupBox2.Text = "Save Record"
+        ' 
+        ' btnupdate
+        ' 
+        btnupdate.Location = New Point(25, 295)
+        btnupdate.Name = "btnupdate"
+        btnupdate.Size = New Size(80, 40)
+        btnupdate.TabIndex = 3
+        btnupdate.Text = "Update"
+        btnupdate.UseVisualStyleBackColor = True
+        ' 
+        ' btndelete
+        ' 
+        btndelete.Location = New Point(234, 295)
+        btndelete.Name = "btndelete"
+        btndelete.Size = New Size(75, 40)
+        btndelete.TabIndex = 4
+        btndelete.Text = "Delete"
+        btndelete.UseVisualStyleBackColor = True
         ' 
         ' txtstudcourse
         ' 
@@ -208,11 +231,21 @@ Partial Class Form1
         Label6.TabIndex = 0
         Label6.Text = "Student ID"
         ' 
+        ' btndisplay
+        ' 
+        btndisplay.Location = New Point(397, 445)
+        btndisplay.Name = "btndisplay"
+        btndisplay.Size = New Size(134, 58)
+        btndisplay.TabIndex = 2
+        btndisplay.Text = "Display by Course"
+        btndisplay.UseVisualStyleBackColor = True
+        ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(864, 450)
+        ClientSize = New Size(864, 569)
+        Controls.Add(btndisplay)
         Controls.Add(GroupBox2)
         Controls.Add(GroupBox1)
         Name = "Form1"
@@ -242,4 +275,7 @@ Partial Class Form1
     Friend WithEvents Label6 As Label
     Friend WithEvents txtstudcourse As TextBox
     Friend WithEvents Label7 As Label
+    Friend WithEvents btndisplay As Button
+    Friend WithEvents btnupdate As Button
+    Friend WithEvents btndelete As Button
 End Class

@@ -1,4 +1,6 @@
 ﻿
+Imports K4os.Compression.LZ4.Streams
+Imports Microsoft.VisualBasic.Devices
 Imports MySql.Data.MySqlClient
 
 Module Module1
@@ -7,6 +9,8 @@ Module Module1
     Dim mysqlcmd As MySqlCommand
     Dim host, uname, pwd, dbname As String
     Dim sqlquery As String
+    Dim adapter As New MySqlDataAdapter
+    Dim dttable As New DataTable
 
     Public Sub ConnectDbase()
         host = "127.0.01"
@@ -73,6 +77,11 @@ Module Module1
                 Form1.txtuserid.Text = reader("studFName").ToString()
                 Form1.txtfirst.Text = reader("studLName").ToString()
                 Form1.txtstudcourse.Text = reader("course").ToString()
+                Form1.btnupdate.Enabled = True
+                Form1.btndelete.Enabled = True
+                Form1.txtfirst.Enabled = True
+                Form1.txtlast.Enabled = True
+                Form1.txtcourse.Enabled = True
             Else
                 MsgBox("No Record!")
 
@@ -86,4 +95,106 @@ Module Module1
 
     End Sub
 
+    Public Sub LoadAllData()
+        sqlquery = "SELECT * FROM student"
+        adapter = New MySqlDataAdapter(sqlquery, con)
+        Try
+            'display the record in your datagridview
+            dttable = New DataTable
+            adapter.Fill(dttable) 'pass the record from mysql to data table
+            With Form2.dgvdata
+                .DataSource = dttable 'set the source of datagridview
+                .AutoResizeColumns()
+
+            End With
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        Finally
+            con.Close()
+
+        End Try
+
+    End Sub
+
+    Public Sub LoadCourse()
+        sqlquery = "select distinct course from student"
+        Try
+            mysqlcmd = New MySqlCommand(sqlquery, con)
+            reader = mysqlcmd.ExecuteReader
+            While reader.Read
+                Form2.cbocourse.Items.Add(reader("course").ToString)
+            End While
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        Finally
+            con.Close()
+
+        End Try
+    End Sub
+
+
+    Public Sub DisplayData(kurso As String)
+        sqlquery = "SELECT * FROM student where course = @kurso"
+        adapter = New MySqlDataAdapter(sqlquery, con)
+        adapter.SelectCommand.Parameters.AddWithValue("@kurso", kurso)
+
+        Try
+            'display the record in your datagridview
+            dttable = New DataTable
+            adapter.Fill(dttable) 'pass the record from mysql to data table
+            With Form2.dgvdata
+                .DataSource = dttable 'set the source of datagridview
+                .AutoResizeColumns()
+
+            End With
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        Finally
+            con.Close()
+
+        End Try
+
+    End Sub
+
+
+    Public Sub UpdateRecord(studId As String, fname As String, lname As String, course As String)
+        sqlquery = "UPDATE student set studFname = @fname, studLname = @lname, course = @course where studID = @studID"
+        Try
+            Using cmd As New MySqlCommand(sqlquery, con)
+                cmd.Parameters.AddWithValue("@fname", fname)
+                cmd.Parameters.AddWithValue("@lname", lname)
+                cmd.Parameters.AddWithValue("@course", course)
+                cmd.Parameters.AddWithValue("@studID", studId)
+                cmd.ExecuteNonQuery()
+            End Using
+            MsgBox("Update Successful!", vbInformation, "Update Message")
+        Catch ex As Exception
+            MsgBox("Error:" & ex.Message, vbInformation, "Error Message")
+        Finally
+            Form1.txtfirst.Clear()
+            Form1.txtlast.Clear()
+            Form1.txtstudcourse.Clear()
+            Form1.txtuserid.Clear()
+
+        End Try
+    End Sub
+
+    Public Sub DeleteRecord(studID As String)
+        sqlquery = "delete from student where StudID = @studID"
+        Try
+            Using cmd As New MySqlCommand(sqlquery, con)
+                cmd.Parameters.AddWithValue("@studID", studID)
+                cmd.ExecuteNonQuery()
+            End Using
+            MsgBox("Deletion Successful!", vbInformation, "Delete Message")
+        Catch ex As Exception
+            MsgBox("Error:" & ex.Message, vbInformation, "Error Message")
+        Finally
+            Form1.txtfirst.Clear()
+            Form1.txtlast.Clear()
+            Form1.txtstudcourse.Clear()
+            Form1.txtuserid.Clear()
+
+        End Try
+    End Sub
 End Module
